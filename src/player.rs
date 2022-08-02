@@ -1,21 +1,40 @@
-use raylib::prelude::Color;
+use raylib::prelude::color::Color;
 
-#[derive(Copy, Clone)]
+#[derive(Clone, Copy)]
 pub struct Player {
-    pub x: i32,
-    pub y: i32
+    pub x: f32,
+    pub y: f32,
+    pub facing: &'static str,
+    pub speed: f32
 }
 
+
 impl Player {
-    pub fn get_sprite() -> [[Color; 4]; 4] {
-        return [[Color::new(34, 32, 52, 255), Color::new(172, 50, 50, 255), Color::new(172, 50, 50, 255), Color::new(106, 190, 48, 255)], [Color::new(172, 50, 50, 255), Color::new(172, 50, 50, 255), Color::new(34, 32, 52, 255), Color::new(106, 190, 48, 255)], [Color::new(172, 50, 50, 255), Color::new(172, 50, 50, 255), Color::new(172, 50, 50, 255), Color::new(106, 190, 48, 255)], [Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255)]];
+    pub fn new() -> Self {
+        Self {
+            x: 0.0,
+            y: 0.0,
+            facing: "north",
+            speed: 50.0
+        }
     }
 
-    pub fn display_sprite(self, screen: &mut [[Color; 64]; 64]) {
-        for x in 0..4 {
-            for y in 0..4 {
-                if self.x + x < 64 && self.y + y < 64 && self.x + x > -1 && self.y + y > -1 {
-                    screen[(self.x + x) as usize][(self.y + y) as usize] = Player::get_sprite()[x as usize][y as usize];
+    pub fn display(self, screen: &mut [[Color; 64]; 64]) {
+        let north = [[Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(153, 229, 80, 255), Color::new(153, 229, 80, 255), Color::new(153, 229, 80, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)]];
+        let south = [[Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(153, 229, 80, 255), Color::new(153, 229, 80, 255), Color::new(153, 229, 80, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)]];
+        let west = [[Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(153, 229, 80, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)]];
+        let east = [[Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(106, 190, 48, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(55, 148, 110, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(55, 148, 110, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(106, 190, 48, 255), Color::new(153, 229, 80, 255), Color::new(106, 190, 48, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)], [Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(153, 229, 80, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255), Color::new(110, 29, 29, 255)]];
+
+        for x in 0..7 {
+            for y in 0..7 {
+                if x as f32 + self.x > -1.0 && x as f32 + self.x < 64.0 && y as f32 + self.y > -1.0 && y as f32 + self.y < 64.0 {
+                    match self.facing {
+                        "north" => screen[(x as f32 + self.x) as usize][(y as f32 + self.y) as usize] = north[x as usize][y as usize],
+                        "south" => screen[(x as f32 + self.x) as usize][(y as f32 + self.y) as usize] = south[x as usize][y as usize],
+                        "west" => screen[(x as f32 + self.x) as usize][(y as f32 + self.y) as usize] = west[x as usize][y as usize],
+                        "east" => screen[(x as f32 + self.x) as usize][(y as f32 + self.y) as usize] = east[x as usize][y as usize],
+                        _ => {}
+                    }
                 }
             }
         }

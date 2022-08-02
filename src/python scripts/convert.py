@@ -1,7 +1,7 @@
 from PIL import Image
   
 # Import an image from directory:
-input_image = Image.open('testo.png')
+input_image = Image.open('EyeEnemy.png')
   
 # Extracting pixel map:
 pixel_map = input_image.load()
