@@ -1,3 +1,4 @@
+use raylib::math::Rectangle;
 use raylib::prelude::color::Color;
 
 #[derive(Clone, Copy)]
@@ -5,7 +6,9 @@ pub struct Player {
     pub x: f32,
     pub y: f32,
     pub facing: &'static str,
-    pub speed: f32
+    pub speed: f32,
+    pub lives: i8,
+    pub rectangle: Rectangle,
 }
 
 
@@ -15,7 +18,9 @@ impl Player {
             x: 0.0,
             y: 0.0,
             facing: "north",
-            speed: 50.0
+            speed: 50.0,
+            lives: 5,
+            rectangle: Rectangle::new(0.0, 0.0, 0.0, 0.0),
         }
     }
 
@@ -38,5 +43,9 @@ impl Player {
                 }
             }
         }
+    }
+
+    pub fn update(&mut self) {
+        self.rectangle = Rectangle::new(self.x * 7.0 + 25.0, self.y * 7.0 + 25.0, 8.0 * 7.0, 8.0 * 7.0);
     }
 }

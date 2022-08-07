@@ -1,7 +1,7 @@
 from PIL import Image
   
 # Import an image from directory:
-input_image = Image.open('EyeEnemy.png')
+input_image = Image.open('StartScreen.png')
   
 # Extracting pixel map:
 pixel_map = input_image.load()
