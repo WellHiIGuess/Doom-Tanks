@@ -4,5 +4,6 @@ pub enum State {
     Playing,
     BetweenPhases,
     Start,
-    Paused
+    Paused,
+    Dead,
 }

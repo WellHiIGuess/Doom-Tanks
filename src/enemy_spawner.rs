@@ -3,6 +3,7 @@ use raylib::color::Color;
 use crate::Enemy;
 
 const BUFFER: usize = 50;
+// const BUFFER: usize = 1;
 
 pub struct EnemySpawner {
     pub x: i32,

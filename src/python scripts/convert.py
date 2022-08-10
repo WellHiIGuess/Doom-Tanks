@@ -1,7 +1,7 @@
 from PIL import Image
   
 # Import an image from directory:
-input_image = Image.open('StartScreen.png')
+input_image = Image.open('TankNF.png')
   
 # Extracting pixel map:
 pixel_map = input_image.load()
