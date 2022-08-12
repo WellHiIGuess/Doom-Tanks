@@ -37,18 +37,18 @@ fn main() {
     let length = std::env::current_exe().unwrap().to_str().unwrap().len();
 
     let mut a = RaylibAudio::init_audio_device();
-    let kill_sound = Sound::load_sound("src/resources/kill.wav");
-    // let kill_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/kill.wav"));
-    let player_death = Sound::load_sound("src/resources/player_death.wav");
-    // let player_death = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/player_death.wav"));
-    let laser_sound = Sound::load_sound("src/resources/laserShoot.wav");
-    // let laser_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/laserShoot.wav"));
-    let rocket = Sound::load_sound("src/resources/rocket.wav");
-    // let rocket = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/rocket.wav"));
-    // let hurt = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/hurt.wav"));
-    let hurt = Sound::load_sound("src/resources/hurt.wav");
-    let phase_10 = Sound::load_sound("src/resources/phase_10.wav");
-    // let phase_10= Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/phase_10.wav"));
+    // let kill_sound = Sound::load_sound("src/resources/kill.wav");
+    let kill_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/kill.wav"));
+    // let player_death = Sound::load_sound("src/resources/player_death.wav");
+    let player_death = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/player_death.wav"));
+    // let laser_sound = Sound::load_sound("src/resources/laserShoot.wav");
+    let laser_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/laserShoot.wav"));
+    // let rocket = Sound::load_sound("src/resources/rocket.wav");
+    let rocket = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/rocket.wav"));
+    let hurt = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/hurt.wav"));
+    // let hurt = Sound::load_sound("src/resources/hurt.wav");
+    // let phase_10 = Sound::load_sound("src/resources/phase_10.wav");
+    let phase_10= Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/phase_10.wav"));
     let mut notified = false;
 
     let font = rl.load_font(&thread, "src/resources/font.ttf");
