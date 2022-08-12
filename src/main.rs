@@ -16,6 +16,7 @@ use std::ops::{Deref, Index};
 use std::path::PathBuf;
 use rand::Rng;
 use raylib::prelude::*;
+use crate::background::BACKGROUND;
 use crate::bullet::Bullet;
 use crate::death_screen::DEATH_SCREEN;
 use crate::enemy::Enemy;
@@ -36,18 +37,18 @@ fn main() {
     let length = std::env::current_exe().unwrap().to_str().unwrap().len();
 
     let mut a = RaylibAudio::init_audio_device();
-    // let kill_sound = Sound::load_sound("src/resources/kill.wav");
-    let kill_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/kill.wav"));
-    // let player_death = Sound::load_sound("src/resources/player_death.wav");
-    let player_death = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/player_death.wav"));
-    // let laser_sound = Sound::load_sound("src/resources/laserShoot.wav");
-    let laser_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/laserShoot.wav"));
-    // let rocket = Sound::load_sound("src/resources/rocket.wav");
-    let rocket = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/rocket.wav"));
-    let hurt = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/hurt.wav"));
-    // let hurt = Sound::load_sound("src/resources/hurt.wav");
-    // let phase_10 = Sound::load_sound("src/resources/phase_10.wav");
-    let phase_10= Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/phase_10.wav"));
+    let kill_sound = Sound::load_sound("src/resources/kill.wav");
+    // let kill_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/kill.wav"));
+    let player_death = Sound::load_sound("src/resources/player_death.wav");
+    // let player_death = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/player_death.wav"));
+    let laser_sound = Sound::load_sound("src/resources/laserShoot.wav");
+    // let laser_sound = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/laserShoot.wav"));
+    let rocket = Sound::load_sound("src/resources/rocket.wav");
+    // let rocket = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/rocket.wav"));
+    // let hurt = Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/hurt.wav"));
+    let hurt = Sound::load_sound("src/resources/hurt.wav");
+    let phase_10 = Sound::load_sound("src/resources/phase_10.wav");
+    // let phase_10= Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/phase_10.wav"));
     let mut notified = false;
 
     let font = rl.load_font(&thread, "src/resources/font.ttf");
@@ -62,6 +63,9 @@ fn main() {
     let mut bullets: Vec<Bullet> = vec![];
     let mut bullet_frame_buffer = 25;
     let mut const_bullet_frame_buffer = 25;
+    let mut points = 0;
+
+    let mut point_buffer = 30;
 
     let mut dead = false;
 
@@ -130,9 +134,7 @@ fn main() {
                 }
             }
 
-            let font_size = font.as_ref().unwrap().base_size();
-            println!("{}", font_size);
-            // d.draw_text_ex(font.as_ref().unwrap(), "101", Vector2::new(25.0, 25.0), 27 as f32, 0.0, Color::WHITE);
+            d.draw_text_ex(font.as_ref().unwrap(), points.to_string().as_str(), Vector2::new(25.0, 25.0), 27 as f32, 0.0, Color::WHITE);
 
             // bullet collisions
             let mut dead_enemies = 0;
@@ -147,6 +149,7 @@ fn main() {
                             j.dead = true;
 
                             a.play_sound(kill_sound.as_ref().unwrap());
+                            points += 10;
                         }
                     }
                 }
@@ -219,12 +222,21 @@ fn main() {
                 a.play_sound(player_death.as_ref().unwrap());
                 dead = true;
             }
+
+            if point_buffer > 0 {
+                point_buffer -= 1;
+            } else {
+                points += 1;
+                point_buffer = 30;
+            }
         };
 
 
         match state {
             Playing => game(),
             Start => start(&mut screen, &mut d, &mut state),
+            Started => started(&mut screen, &mut d, font.as_ref().unwrap(), &mut state),
+            Tutorial => tutorial(&mut screen, &mut d, font.as_ref().unwrap(), &mut state),
             Dead => death_screen(&mut screen, &mut d, &mut state, &mut dead, &mut player, &mut enemy_spawner),
             _ => {}
         }
@@ -232,12 +244,9 @@ fn main() {
         if *&dead {
             state = Dead;
             phase = 0;
+            points = 0;
         }
     }
-}
-
-fn get_dir() -> String {
-    std::env::current_exe().unwrap().to_str().unwrap().to_string()
 }
 
 fn start(screen: &mut [[Color; 64]; 64], d: &mut RaylibDrawHandle, state: &mut State) {
@@ -251,7 +260,49 @@ fn start(screen: &mut [[Color; 64]; 64], d: &mut RaylibDrawHandle, state: &mut S
     }
 
     if d.is_key_pressed(KeyboardKey::KEY_Q) {
-        *state = Playing;
+        *state = Started;
+    }
+}
+
+fn started(screen: &mut [[Color; 64]; 64], d: &mut RaylibDrawHandle, font: &Font, state: &mut State) {
+    *screen = BACKGROUND;
+
+    // drawing screen
+    for x in 0..64 {
+        for y in 0..64 {
+            d.draw_rectangle(x as i32 * 7 + 25, y as i32 * 7 + 25, 7, 7, screen[x][y]);
+        }
+    }
+
+    d.draw_text_ex(font, "PLAY", Vector2::new(95.0, 95.0), 27.0, 0.0, Color::WHITE);
+    d.draw_text_ex(font, "TUTORIAL", Vector2::new(95.0, 165.0), 27.0, 0.0, Color::WHITE);
+
+    if d.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
+        if d.get_mouse_y() > 94 && d.get_mouse_y() < 128 {
+            *state = Playing;
+        } else if d.get_mouse_y() > 164 && d.get_mouse_y() < 192 {
+            *state = Tutorial;
+        }
+    }
+}
+
+fn tutorial(screen: &mut [[Color; 64]; 64], d: &mut RaylibDrawHandle, font: &Font, state: &mut State) {
+    *screen = BACKGROUND;
+
+    // drawing screen
+    for x in 0..64 {
+        for y in 0..64 {
+            d.draw_rectangle(x as i32 * 7 + 25, y as i32 * 7 + 25, 7, 7, screen[x][y]);
+        }
+    }
+
+    d.draw_text_ex(font, "PLAY", Vector2::new(95.0, 95.0), 27.0, 0.0, Color::WHITE);
+    d.draw_text_ex(font, "WS - Forward \nand back\n\nAD - Turn\n\nL - SHOOT!", Vector2::new(95.0, 165.0), 27.0, 0.0, Color::WHITE);
+
+    if d.is_mouse_button_pressed(MouseButton::MOUSE_LEFT_BUTTON) {
+        if d.get_mouse_y() > 94 && d.get_mouse_y() < 128 {
+            *state = Playing;
+        }
     }
 }
 

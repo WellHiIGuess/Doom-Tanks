@@ -15,8 +15,8 @@ pub struct Player {
 impl Player {
     pub fn new() -> Self {
         Self {
-            x: 0.0,
-            y: 0.0,
+            x: 10.0,
+            y: 10.0,
             facing: "north",
             speed: 50.0,
             lives: 5,
