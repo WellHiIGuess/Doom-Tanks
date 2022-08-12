@@ -51,7 +51,7 @@ fn main() {
     let phase_10= Sound::load_sound(&*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/phase_10.wav"));
     let mut notified = false;
 
-    let font = rl.load_font(&thread, "src/resources/font.ttf");
+    let font = rl.load_font(&thread, &*(std::env::current_exe().unwrap().to_str().unwrap()[..length - 8].to_owned() + "src/resources/font.ttf"));
 
     let mut screen = [[Color::new( 255, 255, 255, 255); 64] ;64];
 
